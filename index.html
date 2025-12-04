@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Todo App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        (function (d) {
+            var config = {
+                kitId: 'apf2qwt',
+                scriptTimeout: 3000,
+                async: true
+            },
+                h = d.documentElement, t = setTimeout(function () { h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive"; }, config.scriptTimeout), tk = d.createElement("script"), f = false, s = d.getElementsByTagName("script")[0], a; h.className += " wf-loading"; tk.src = 'https://use.typekit.net/' + config.kitId + '.js'; tk.async = true; tk.onload = tk.onreadystatechange = function () { a = this.readyState; if (f || a && a != "complete" && a != "loaded") return; f = true; clearTimeout(t); try { Typekit.load(config) } catch (e) { } }; s.parentNode.insertBefore(tk, s)
+        })(document);
+    </script>
+    <link rel="stylesheet" href="style.css?v=3">
+</head>
+
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="app-wrapper">
+        <!-- Orbital Timer Widget -->
+        <div class="container timer-widget">
+            <header>
+                <h1>Focus Timer</h1>
+                <p class="date-display">YOU GOT THIS</p>
+            </header>
+            <div class="timer-display">
+                <svg class="timer-ring" width="200" height="200">
+                    <circle class="timer-ring-bg" stroke="rgba(255,255,255,0.1)" stroke-width="8" fill="transparent"
+                        r="90" cx="100" cy="100" />
+                    <circle class="timer-ring-progress" stroke="var(--secondary-color)" stroke-width="8"
+                        fill="transparent" r="90" cx="100" cy="100" />
+                </svg>
+                <div class="timer-time">
+                    <span id="timer-minutes">25</span>:<span id="timer-seconds">00</span>
+                </div>
+            </div>
+            <div class="timer-controls">
+                <div class="timer-presets">
+                    <button class="preset-btn" data-time="15">15m</button>
+                    <button class="preset-btn" data-time="30">30m</button>
+                    <button class="preset-btn" data-time="45">45m</button>
+                    <button class="preset-btn" data-time="60">60m</button>
+                </div>
+                <div class="timer-custom-row">
+                    <button id="custom-timer-btn" class="preset-btn custom-wide">Custom</button>
+                </div>
+                <div class="timer-actions">
+                    <button id="timer-start" class="timer-btn start"><i class="fas fa-play"></i></button>
+                    <button id="timer-reset" class="timer-btn reset"><i class="fas fa-redo"></i></button>
+                </div>
+            </div>
+
+            <!-- Custom Timer Modal -->
+            <div id="custom-timer-modal" class="modal hidden">
+                <div class="modal-content">
+                    <h3>Set Timer</h3>
+                    <div class="time-inputs">
+                        <div class="time-field">
+                            <input type="number" id="custom-hours" min="0" max="99" placeholder="00">
+                            <label>Hr</label>
+                        </div>
+                        <span class="time-separator">:</span>
+                        <div class="time-field">
+                            <input type="number" id="custom-minutes" min="0" max="59" placeholder="00">
+                            <label>Min</label>
+                        </div>
+                        <span class="time-separator">:</span>
+                        <div class="time-field">
+                            <input type="number" id="custom-seconds" min="0" max="59" placeholder="00">
+                            <label>Sec</label>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button id="custom-cancel" class="modal-btn cancel">Cancel</button>
+                        <button id="custom-start" class="modal-btn start">Start</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delete Confirmation Modal -->
+            <div id="delete-modal" class="modal hidden">
+                <div class="modal-content">
+                    <h3>삭제 확인</h3>
+                    <p id="delete-message" style="color: var(--text-muted); text-align: center; margin: 10px 0;">정말로
+                        삭제하시겠습니까?</p>
+                    <div class="modal-actions">
+                        <button id="delete-cancel" class="modal-btn cancel">취소</button>
+                        <button id="delete-confirm" class="modal-btn start"
+                            style="background: var(--danger-color); box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);">삭제</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Tasks Section -->
+        <div class="container">
+            <header>
+                <h1>My Tasks</h1>
+                <p class="date-display" id="dateDisplay"></p>
+            </header>
+
+            <div class="input-container" id="inputContainer">
+                <div class="input-main">
+                    <select id="prioritySelect">
+                        <option value="low">낮음</option>
+                        <option value="medium" selected>보통</option>
+                        <option value="high">높음</option>
+                    </select>
+                    <input type="text" id="todoInput" placeholder="할 일을 입력하세요..." autocomplete="off">
+                    <button id="addBtn"><i class="fas fa-plus"></i></button>
+                </div>
+                <div class="input-details">
+                    <input type="text" id="deadlineInput" title="마감 기한" placeholder="마감 기한 설정">
+                    <textarea id="noteInput" placeholder="메모를 입력하세요 (선택사항)" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="todo-stats">
+                <span>남은 할 일: <b id="itemsLeft">0</b></span>
+                <button id="clearAll" class="text-btn">모두 삭제</button>
+            </div>
+
+            <ul class="todo-list" id="todoList">
+                <!-- Active Tasks -->
+            </ul>
+        </div>
+
+        <!-- Trash Dock -->
+        <div id="trash-dock" class="trash-dock">
+            <div class="trash-header" id="trash-header">
+                <h3><i class="fas fa-trash"></i> 휴지통 <span id="trash-count" class="trash-count-badge">0</span></h3>
+            </div>
+            <div class="trash-content">
+                <div class="trash-list" id="trashList">
+                    <!-- Trashed Items -->
+                </div>
+                <div class="trash-actions-dock">
+                    <button id="empty-trash" type="button" class="modal-btn start"
+                        style="background: var(--danger-color); width: 100%;" data-tooltip="휴지통 보관 기간은 30일입니다">휴지통
+                        비우기</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container achieved-container">
+            <header>
+                <h1>Achieved</h1>
+                <p class="date-display">성과 평가 및 회고</p>
+            </header>
+            <ul class="todo-list" id="achievedList">
+                <!-- Completed Tasks -->
+            </ul>
+        </div>
+    </div>
+
+    <script type="module" src="script.js?v=17"></script>
+</body>
+
+</html>
