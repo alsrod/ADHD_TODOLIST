@@ -34,8 +34,10 @@ body {
     color: var(--text-color);
     min-height: 100vh;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    flex-direction: column;
+    /* Changed for footer positioning */
+    align-items: center;
+    /* Center content horizontally */
     /* Changed from center to allow scrolling if needed */
     overflow-x: hidden;
     position: relative;
@@ -106,13 +108,18 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     width: 100%;
-    max-width: 1400px;
+    max-width: 1600px;
+    /* Increased max-width for 3-column layout */
+    margin: 0 auto;
+    flex: 1;
+    /* Push footer to bottom */
 }
 
-/* App Container */
+/* App Container Defaults (Mobile/Tablet) */
 .container {
     width: 100%;
-    max-width: 500px;
+    max-width: 600px;
+    /* Slightly wider for better mobile view */
     background: var(--glass-bg);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
@@ -120,8 +127,74 @@ body {
     border-radius: 24px;
     padding: 2rem;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    flex: 1 1 auto;
+}
+
+/* Default Order (Mobile/Tablet: Stacked) */
+.tasks-widget {
+    order: 1;
+    flex: 2 0 600px;
+    /* Prioritize width, don't shrink below 600px if possible */
+}
+
+.achieved-container {
+    order: 2;
     flex: 1 1 300px;
-    /* Allow flex grow/shrink */
+    /* Allow shrinking */
+}
+
+.timer-widget {
+    order: 3;
+    max-width: 600px;
+    /* Match other containers on mobile */
+    position: static;
+    /* Reset sticky on mobile */
+    flex: 1 1 300px;
+    /* Allow shrinking */
+}
+
+/* Input Row Optimization */
+.input-main {
+    display: flex;
+    gap: 10px;
+    flex-wrap: nowrap;
+    /* Prevent wrapping */
+    width: 100%;
+}
+
+/* Desktop Layout */
+@media (min-width: 1200px) {
+    .app-wrapper {
+        flex-wrap: nowrap;
+        /* Force single row */
+        align-items: flex-start;
+    }
+
+    .timer-widget {
+        order: 1;
+        flex: 1 3 300px;
+        /* Grow 1, Shrink 3 (high priority), Basis 300px */
+        position: sticky;
+        top: 2rem;
+        max-width: 500px;
+        /* Cap growth at 500px */
+    }
+
+    .tasks-widget {
+        order: 2;
+        flex: 1 1 400px;
+        /* Equal growth and base width */
+        max-width: none;
+        /* Remove max-width restriction */
+    }
+
+    .achieved-container {
+        order: 3;
+        flex: 1 1 400px;
+        /* Equal growth and base width */
+        max-width: none;
+        /* Remove max-width restriction */
+    }
 }
 
 /* Achieved Specifics */
@@ -992,9 +1065,6 @@ input[type="datetime-local"]:focus,
     flex-direction: column;
     align-items: center;
     gap: 1.5rem;
-    flex: 1 1 300px;
-    /* Allow it to fit in the flex layout */
-    max-width: 400px;
 }
 
 .timer-display {
