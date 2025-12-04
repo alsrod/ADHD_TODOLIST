@@ -22,7 +22,7 @@
                 h = d.documentElement, t = setTimeout(function () { h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive"; }, config.scriptTimeout), tk = d.createElement("script"), f = false, s = d.getElementsByTagName("script")[0], a; h.className += " wf-loading"; tk.src = 'https://use.typekit.net/' + config.kitId + '.js'; tk.async = true; tk.onload = tk.onreadystatechange = function () { a = this.readyState; if (f || a && a != "complete" && a != "loaded") return; f = true; clearTimeout(t); try { Typekit.load(config) } catch (e) { } }; s.parentNode.insertBefore(tk, s)
         })(document);
     </script>
-    <link rel="stylesheet" href="style.css?v=13">
+    <link rel="stylesheet" href="style.css?v=18">
 </head>
 
 <body>
@@ -35,34 +35,52 @@
     <div class="app-wrapper">
         <!-- Orbital Timer Widget -->
         <div class="container timer-widget">
-            <header>
-                <h1>Focus Timer</h1>
-                <p class="date-display">YOU GOT THIS</p>
-            </header>
-            <div class="timer-display">
-                <svg class="timer-ring" width="200" height="200">
-                    <circle class="timer-ring-bg" stroke="rgba(255,255,255,0.1)" stroke-width="8" fill="transparent"
-                        r="90" cx="100" cy="100" />
-                    <circle class="timer-ring-progress" stroke="var(--secondary-color)" stroke-width="8"
-                        fill="transparent" r="90" cx="100" cy="100" />
-                </svg>
-                <div class="timer-time">
-                    <span id="timer-minutes">15</span>:<span id="timer-seconds">00</span>
+            <!-- Focus Timer View -->
+            <div id="focus-timer-view">
+                <header>
+                    <h1>Focus Timer</h1>
+                    <p class="date-display">YOU GOT THIS</p>
+                </header>
+                <div class="timer-display">
+                    <svg class="timer-ring" width="200" height="200">
+                        <circle class="timer-ring-bg" stroke="rgba(255,255,255,0.1)" stroke-width="8" fill="transparent"
+                            r="90" cx="100" cy="100" />
+                        <circle class="timer-ring-progress" stroke="var(--secondary-color)" stroke-width="8"
+                            fill="transparent" r="90" cx="100" cy="100" />
+                    </svg>
+                    <div class="timer-time">
+                        <span id="timer-minutes">15</span>:<span id="timer-seconds">00</span>
+                    </div>
+                </div>
+                <div class="timer-controls">
+                    <div class="timer-presets">
+                        <button class="preset-btn" data-time="15">15m</button>
+                        <button class="preset-btn" data-time="30">30m</button>
+                        <button class="preset-btn" data-time="45">45m</button>
+                        <button class="preset-btn" data-time="60">60m</button>
+                    </div>
+                    <div class="timer-custom-row">
+                        <button id="custom-timer-btn" class="preset-btn custom-wide">Custom</button>
+                    </div>
+                    <div class="timer-actions">
+                        <button id="timer-start" class="timer-btn start"><i class="fas fa-play"></i></button>
+                        <button id="timer-reset" class="timer-btn reset"><i class="fas fa-redo"></i></button>
+                    </div>
                 </div>
             </div>
-            <div class="timer-controls">
-                <div class="timer-presets">
-                    <button class="preset-btn" data-time="15">15m</button>
-                    <button class="preset-btn" data-time="30">30m</button>
-                    <button class="preset-btn" data-time="45">45m</button>
-                    <button class="preset-btn" data-time="60">60m</button>
-                </div>
-                <div class="timer-custom-row">
-                    <button id="custom-timer-btn" class="preset-btn custom-wide">Custom</button>
-                </div>
-                <div class="timer-actions">
-                    <button id="timer-start" class="timer-btn start"><i class="fas fa-play"></i></button>
-                    <button id="timer-reset" class="timer-btn reset"><i class="fas fa-redo"></i></button>
+
+            <!-- Time Attacker View -->
+            <div id="time-attacker-view" class="hidden">
+                <header>
+                    <h1>Time Attacker</h1>
+                    <p class="date-display">LET'S GET IT DONE</p>
+                </header>
+                <div class="stopwatch-display" id="stopwatch-display">00:00.00</div>
+                <div class="timer-controls">
+                    <div class="timer-actions">
+                        <button id="stopwatch-start" class="timer-btn start"><i class="fas fa-play"></i></button>
+                        <button id="stopwatch-reset" class="timer-btn reset"><i class="fas fa-redo"></i></button>
+                    </div>
                 </div>
             </div>
 
@@ -141,6 +159,13 @@
             </ul>
         </div>
 
+        <!-- Mode Switch Dock -->
+        <div id="mode-switch-dock" class="mode-switch-dock">
+            <button id="mode-switch-btn" class="mode-switch-btn">
+                <i class="fas fa-clock"></i>
+            </button>
+        </div>
+
         <!-- Trash Dock -->
         <div id="trash-dock" class="trash-dock">
             <div class="trash-header" id="trash-header">
@@ -173,7 +198,7 @@
         <p>&copy; 2025 onspace collective. All Rights Reserved.</p>
     </footer>
 
-    <script type="module" src="script.js?v=25"></script>
+    <script type="module" src="script.js?v=27"></script>
 </body>
 
 </html>

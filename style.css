@@ -356,7 +356,7 @@ body {
     padding: 2px 8px;
     border-radius: 12px;
     font-weight: 600;
-    margin-left: 8px;
+    margin-left: 0;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -745,10 +745,11 @@ input[type="datetime-local"]:focus,
 
 .todo-header {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
     margin-bottom: 2px;
+    flex-wrap: wrap;
 }
 
 .todo-text {
@@ -1084,6 +1085,21 @@ input[type="datetime-local"]:focus,
     gap: 1.5rem;
 }
 
+#focus-timer-view,
+#time-attacker-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 2.5rem;
+}
+
+.timer-widget header {
+    text-align: left;
+    width: 100%;
+    margin-bottom: 0;
+}
+
 .timer-display {
     position: relative;
     width: 200px;
@@ -1352,6 +1368,67 @@ input[type="datetime-local"]:focus,
 
 .timer-btn.reset:hover {
     background: rgba(255, 255, 255, 0.2);
+}
+
+/* Stopwatch Styles */
+.stopwatch-display {
+    font-size: 4rem;
+    font-family: 'Courier New', Courier, monospace;
+    /* Monospaced for stability */
+    font-weight: 700;
+    color: var(--text-color);
+    text-align: center;
+    margin: 0;
+    /* Rely on container gap */
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    letter-spacing: 2px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Mode Switch Dock Styles */
+.mode-switch-dock {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 70px;
+    height: 60px;
+    background: rgba(20, 20, 20, 0.95);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.mode-switch-dock:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+    border-color: var(--secondary-color);
+}
+
+.mode-switch-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+.mode-switch-btn:hover {
+    color: var(--secondary-color);
 }
 
 /* Trash Dock Styles */

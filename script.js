@@ -56,6 +56,26 @@ document.addEventListener('DOMContentLoaded', () => {
     let timeLeft = totalTime;
     let isRunning = false;
 
+    // View Elements
+    const focusTimerView = document.getElementById('focus-timer-view');
+    const timeAttackerView = document.getElementById('time-attacker-view');
+    const stopwatchDisplay = document.getElementById('stopwatch-display');
+    const stopwatchStartBtn = document.getElementById('stopwatch-start');
+    const stopwatchResetBtn = document.getElementById('stopwatch-reset');
+
+    // Stopwatch State
+    let isStopwatchMode = false;
+    let stopwatchInterval;
+    let stopwatchStartTime = 0;
+    let stopwatchElapsedTime = 0;
+    let stopwatchRunning = false;
+
+    // Mode Switch Elements
+    const modeSwitchBtn = document.getElementById('mode-switch-btn');
+    const timerPresets = document.querySelector('.timer-presets');
+    const timerCustomRow = document.querySelector('.timer-custom-row');
+    // dateDisplay is already declared at line 43
+
     // Circumference = 2 * PI * r (r=90) => 565.48
     const circumference = 2 * Math.PI * 90;
     timerRing.style.strokeDasharray = `${circumference} ${circumference}`;
@@ -82,6 +102,54 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function formatStopwatchTime(ms) {
+        const totalSeconds = Math.floor(ms / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+        const centiseconds = Math.floor((ms % 1000) / 10);
+
+        if (hours > 0) {
+            return `${hours.toString().padStart(2, '0')}h${minutes.toString().padStart(2, '0')}m${seconds.toString().padStart(2, '0')}.${centiseconds.toString().padStart(2, '0')}`;
+        } else {
+            return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${centiseconds.toString().padStart(2, '0')}`;
+        }
+    }
+
+    function updateStopwatchDisplay() {
+        stopwatchDisplay.textContent = formatStopwatchTime(stopwatchElapsedTime);
+    }
+
+    function startStopwatch() {
+        if (stopwatchRunning) {
+            // Pause
+            clearInterval(stopwatchInterval);
+            stopwatchRunning = false;
+            stopwatchStartBtn.innerHTML = '<i class="fas fa-play"></i>';
+            stopwatchStartBtn.classList.remove('active');
+        } else {
+            // Start
+            stopwatchRunning = true;
+            stopwatchStartBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            stopwatchStartBtn.classList.add('active');
+            stopwatchStartTime = performance.now() - stopwatchElapsedTime;
+
+            stopwatchInterval = setInterval(() => {
+                stopwatchElapsedTime = performance.now() - stopwatchStartTime;
+                updateStopwatchDisplay();
+            }, 10); // Update every 10ms
+        }
+    }
+
+    function resetStopwatch() {
+        clearInterval(stopwatchInterval);
+        stopwatchRunning = false;
+        stopwatchElapsedTime = 0;
+        updateStopwatchDisplay();
+        stopwatchStartBtn.innerHTML = '<i class="fas fa-play"></i>';
+        stopwatchStartBtn.classList.remove('active');
+    }
+
     function startTimer() {
         if (isRunning) {
             // Pause
@@ -92,6 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             // Start
             if (timeLeft <= 0) return;
+
             isRunning = true;
             timerStartBtn.innerHTML = '<i class="fas fa-pause"></i>';
             timerStartBtn.classList.add('active');
@@ -101,49 +170,56 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateTimerDisplay();
 
                 if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    isRunning = false;
-                    timerStartBtn.innerHTML = '<i class="fas fa-play"></i>';
-                    timerStartBtn.classList.remove('active');
-
-                    // Visual Feedback: Flash the ring
-                    timerRing.style.stroke = 'var(--primary-color)';
-                    const flashInterval = setInterval(() => {
-                        timerRing.style.opacity = timerRing.style.opacity === '0' ? '1' : '0';
-                    }, 300);
-
-                    // Stop flashing after 3 seconds
-                    setTimeout(() => {
-                        clearInterval(flashInterval);
-                        timerRing.style.opacity = '1';
-                    }, 3000);
-
-                    // Audio Feedback: Simple beep
-                    try {
-                        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                        const oscillator = audioContext.createOscillator();
-                        const gainNode = audioContext.createGain();
-
-                        oscillator.connect(gainNode);
-                        gainNode.connect(audioContext.destination);
-
-                        oscillator.type = 'sine';
-                        oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // A4
-                        oscillator.frequency.exponentialRampToValueAtTime(880, audioContext.currentTime + 0.5); // Slide up to A5
-
-                        gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
-                        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-
-                        oscillator.start();
-                        oscillator.stop(audioContext.currentTime + 0.5);
-                    } catch (e) {
-                        console.error("Audio playback failed", e);
-                    }
+                    handleTimerComplete();
                 }
             }, 1000);
         }
     }
 
+    function handleTimerComplete() {
+        clearInterval(timerInterval);
+        isRunning = false;
+        timerStartBtn.innerHTML = '<i class="fas fa-play"></i>';
+        timerStartBtn.classList.remove('active');
+
+        // Visual Feedback: Flash the ring
+        timerRing.style.stroke = 'var(--primary-color)';
+        const flashInterval = setInterval(() => {
+            timerRing.style.opacity = timerRing.style.opacity === '0' ? '1' : '0';
+        }, 300);
+
+        // Stop flashing after 3 seconds
+        setTimeout(() => {
+            clearInterval(flashInterval);
+            timerRing.style.opacity = '1';
+        }, 3000);
+
+        // Audio Feedback: Simple beep
+        playTimerSound();
+    }
+
+    function playTimerSound() {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // A4
+            oscillator.frequency.exponentialRampToValueAtTime(880, audioContext.currentTime + 0.5); // Slide up to A5
+
+            gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.5);
+        } catch (e) {
+            console.error("Audio playback failed", e);
+        }
+    }
     function resetTimer() {
         clearInterval(timerInterval);
         isRunning = false;
@@ -162,6 +238,32 @@ document.addEventListener('DOMContentLoaded', () => {
         timerStartBtn.innerHTML = '<i class="fas fa-play"></i>';
         timerStartBtn.classList.remove('active');
     }
+
+    function toggleMode() {
+        isStopwatchMode = !isStopwatchMode;
+
+        if (isStopwatchMode) {
+            // Switch to Stopwatch
+            focusTimerView.classList.add('hidden');
+            timeAttackerView.classList.remove('hidden');
+            modeSwitchBtn.innerHTML = '<i class="fas fa-hourglass-start"></i>';
+
+            // Reset Timer if running
+            if (isRunning) resetTimer();
+        } else {
+            // Switch to Timer
+            focusTimerView.classList.remove('hidden');
+            timeAttackerView.classList.add('hidden');
+            modeSwitchBtn.innerHTML = '<i class="fas fa-clock"></i>';
+
+            // Reset Stopwatch if running
+            if (stopwatchRunning) resetStopwatch();
+        }
+    }
+
+    modeSwitchBtn.addEventListener('click', toggleMode);
+    stopwatchStartBtn.addEventListener('click', startStopwatch);
+    stopwatchResetBtn.addEventListener('click', resetStopwatch);
 
     function setTime(seconds) {
         resetTimer();
