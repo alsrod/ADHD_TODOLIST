@@ -259,6 +259,16 @@ document.addEventListener('DOMContentLoaded', () => {
             // Reset Stopwatch if running
             if (stopwatchRunning) resetStopwatch();
         }
+
+        // Scroll to timer widget on mobile
+        if (window.innerWidth <= 768) {
+            const timerWidget = document.querySelector('.timer-widget');
+            if (timerWidget) {
+                setTimeout(() => {
+                    timerWidget.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+        }
     }
 
     modeSwitchBtn.addEventListener('click', toggleMode);
