@@ -1,28 +1,35 @@
-# Premium Todo App
+# Tasker for ADHD
 
-A beautiful, modern Todo application built with HTML, CSS, and Vanilla JavaScript.
+### A Note from the Developer: You Are Not Alone.
+
+We know firsthand how frustrating it can be to lose focus or struggle with follow-through due to ADHD. This application, **Tasker for ADHD**, was created out of a desire to offer a genuine source of strength and structure for others going through similar experiences.
+
+Our goal is simple: to help you break down overwhelming tasks and build confidence one step at a time. This is not a final product; it is an ongoing project. We are dedicated to continuously refining and enhancing Tasker for ADHD to better serve the needs of our community.
+
+Thank you for being here. We look forward to defeating these daily obstacles with you.
 
 ## Features
 
-- **Add Tasks**: Easily add new tasks to your list.
-- **Edit Tasks**: Modify existing tasks inline.
-- **Delete Tasks**: Remove tasks you no longer need.
-- **Mark as Complete**: Check off finished tasks.
-- **Local Storage**: Your tasks are saved automatically and persist after refresh.
-- **Premium Design**: Glassmorphism UI, smooth animations, and a dynamic background.
+*   **Focus Timer**: Built-in orbital timer with customizable presets (5m, 15m, 25m) and visual/audio feedback.
+*   **Task Management**:
+    *   Priority-based sorting (High, Medium, Low).
+    *   Deadline tracking with visual indicators for overdue items.
+    *   "Nailed It" / "Solid Work" / "It's Done" evaluation system for completed tasks.
+*   **Gamification**: Visual rewards and satisfying interactions to keep you motivated.
+*   **Trash Can**: Soft delete functionality with 30-day auto-deletion policy.
+*   **Retro Aesthetic**: A unique, dark-mode retro design with glassmorphism effects.
 
-## How to Run
+## Tech Stack
 
-You can simply open `index.html` in your web browser.
+*   **Frontend**: HTML5, CSS3 (Vanilla), JavaScript (ES6+)
+*   **Backend**: Firebase Realtime Database
+*   **Deployment**: Vercel
 
-For the best experience (to ensure all fonts and icons load correctly without CORS issues), it is recommended to run a local server:
+## Setup
 
-1. Open a terminal in this directory.
-2. Run `python3 -m http.server 8080` (or any other port).
-3. Open `http://localhost:8080` in your browser.
+1.  Clone the repository.
+2.  Open `index.html` in your browser or serve with a local server (e.g., `python3 -m http.server`).
 
-## Technologies
+## License
 
-- HTML5
-- CSS3 (Variables, Flexbox, Animations, Glassmorphism)
-- JavaScript (ES6+, LocalStorage)
+MIT
