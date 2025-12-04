@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -47,7 +47,7 @@
                         fill="transparent" r="90" cx="100" cy="100" />
                 </svg>
                 <div class="timer-time">
-                    <span id="timer-minutes">25</span>:<span id="timer-seconds">00</span>
+                    <span id="timer-minutes">15</span>:<span id="timer-seconds">00</span>
                 </div>
             </div>
             <div class="timer-controls">
@@ -96,13 +96,13 @@
             <!-- Delete Confirmation Modal -->
             <div id="delete-modal" class="modal hidden">
                 <div class="modal-content">
-                    <h3>삭제 확인</h3>
-                    <p id="delete-message" style="color: var(--text-muted); text-align: center; margin: 10px 0;">정말로
-                        삭제하시겠습니까?</p>
+                    <h3>Confirm Delete</h3>
+                    <p id="delete-message" style="color: var(--text-muted); text-align: center; margin: 10px 0;">Are you
+                        sure you want to delete this?</p>
                     <div class="modal-actions">
-                        <button id="delete-cancel" class="modal-btn cancel">취소</button>
+                        <button id="delete-cancel" class="modal-btn cancel">Cancel</button>
                         <button id="delete-confirm" class="modal-btn start"
-                            style="background: var(--danger-color); box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);">삭제</button>
+                            style="background: var(--danger-color); box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);">Delete</button>
                     </div>
                 </div>
             </div>
@@ -118,22 +118,22 @@
             <div class="input-container" id="inputContainer">
                 <div class="input-main">
                     <select id="prioritySelect">
-                        <option value="low">낮음</option>
-                        <option value="medium" selected>보통</option>
-                        <option value="high">높음</option>
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
                     </select>
-                    <input type="text" id="todoInput" placeholder="할 일을 입력하세요..." autocomplete="off">
+                    <input type="text" id="todoInput" placeholder="Enter a task..." autocomplete="off">
                     <button id="addBtn"><i class="fas fa-plus"></i></button>
                 </div>
                 <div class="input-details">
-                    <input type="text" id="deadlineInput" title="마감 기한" placeholder="마감 기한 설정">
-                    <textarea id="noteInput" placeholder="메모를 입력하세요 (선택사항)" rows="3"></textarea>
+                    <input type="text" id="deadlineInput" title="Deadline" placeholder="Set deadline">
+                    <textarea id="noteInput" placeholder="Enter a note (optional)" rows="3"></textarea>
                 </div>
             </div>
 
             <div class="todo-stats">
-                <span>남은 할 일: <b id="itemsLeft">0</b></span>
-                <button id="clearAll" class="text-btn">모두 삭제</button>
+                <span>Tasks left: <b id="itemsLeft">0</b></span>
+                <button id="clearAll" class="text-btn">Clear All</button>
             </div>
 
             <ul class="todo-list" id="todoList">
@@ -144,7 +144,7 @@
         <!-- Trash Dock -->
         <div id="trash-dock" class="trash-dock">
             <div class="trash-header" id="trash-header">
-                <h3><i class="fas fa-trash"></i> 휴지통 <span id="trash-count" class="trash-count-badge">0</span></h3>
+                <h3><i class="fas fa-trash"></i> Trash <span id="trash-count" class="trash-count-badge">0</span></h3>
             </div>
             <div class="trash-content">
                 <div class="trash-list" id="trashList">
@@ -152,8 +152,8 @@
                 </div>
                 <div class="trash-actions-dock">
                     <button id="empty-trash" type="button" class="modal-btn start"
-                        style="background: var(--danger-color); width: 100%;" data-tooltip="휴지통 보관 기간은 30일입니다">휴지통
-                        비우기</button>
+                        style="background: var(--danger-color); width: 100%;"
+                        data-tooltip="Items are stored for 30 days">Empty Trash</button>
                 </div>
             </div>
         </div>
@@ -161,7 +161,7 @@
         <div class="container achieved-container">
             <header>
                 <h1>Achieved</h1>
-                <p class="date-display">성과 평가 및 회고</p>
+                <p class="date-display">Performance & Review</p>
             </header>
             <ul class="todo-list" id="achievedList">
                 <!-- Completed Tasks -->
@@ -173,7 +173,7 @@
         <p>&copy; 2025 onspace collective. All Rights Reserved.</p>
     </footer>
 
-    <script type="module" src="script.js?v=17"></script>
+    <script type="module" src="script.js?v=23"></script>
 </body>
 
 </html>

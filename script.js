@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const customTimerInput = document.getElementById('custom-timer-input');
 
     let timerInterval;
-    let totalTime = 25 * 60; // Default 25 minutes in seconds
+    let totalTime = 15 * 60; // Default 15 minutes in seconds
     let timeLeft = totalTime;
     let isRunning = false;
 
@@ -166,7 +166,24 @@ document.addEventListener('DOMContentLoaded', () => {
     presetBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const minutes = parseInt(btn.dataset.time);
-            setTime(minutes * 60);
+            const secondsToAdd = minutes * 60;
+
+            // If timer finished, reset first
+            if (timeLeft <= 0) {
+                totalTime = 0;
+                timeLeft = 0;
+                // If it was running (finished state), stop it
+                if (isRunning) {
+                    clearInterval(timerInterval);
+                    isRunning = false;
+                    timerStartBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    timerStartBtn.classList.remove('active');
+                }
+            }
+
+            totalTime += secondsToAdd;
+            timeLeft += secondsToAdd;
+            updateTimerDisplay();
         });
     });
 
@@ -194,7 +211,10 @@ document.addEventListener('DOMContentLoaded', () => {
             customSeconds.value = '';
         };
 
-        customCancelBtn.addEventListener('click', closeModal);
+        customCancelBtn.addEventListener('click', () => {
+            setTime(900); // Default to 15 minutes
+            closeModal();
+        });
 
         customStartBtn.addEventListener('click', () => {
             const hours = parseInt(customHours.value) || 0;
@@ -367,10 +387,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         console.log("Trash emptied successfully");
                     }).catch((error) => {
                         console.error("Error emptying trash: ", error);
-                        alert("휴지통을 비우는 중 오류가 발생했습니다.");
+                        alert("Error emptying trash.");
                     });
                 } else {
-                    alert("휴지통이 이미 비어있습니다.");
+                    alert("Trash is already empty.");
                 }
             }
         }).catch((error) => {
@@ -380,11 +400,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderDate() {
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        dateDisplay.textContent = new Date().toLocaleDateString('ko-KR', options);
+        dateDisplay.textContent = new Date().toLocaleDateString('en-GB', options);
     }
 
     function clearAll() {
-        if (confirm('모든 할 일을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+        if (confirm('Are you sure you want to delete all tasks? This cannot be undone.')) {
             try {
                 remove(todosRef);
             } catch (e) {
@@ -609,7 +629,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const newNote = noteInput.value.trim();
 
             if (newText) {
-                completeBtn.textContent = '저장 중...';
+                completeBtn.textContent = 'Saving...';
                 completeBtn.disabled = true;
                 try {
                     await update(ref(db, `todos/${id}`), {
@@ -622,12 +642,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.removeEventListener('click', handleOutsideClick);
                 } catch (e) {
                     console.error("Error updating item: ", e);
-                    alert("수정 중 오류가 발생했습니다.");
-                    completeBtn.textContent = '수정완료';
+                    alert("Error updating item.");
+                    completeBtn.textContent = 'Saved';
                     completeBtn.disabled = false;
                 }
             } else {
-                alert("할 일을 입력해주세요.");
+                alert("Please enter a task.");
             }
         };
 
@@ -668,7 +688,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function permanentDeleteTodo(id) {
-        if (confirm('정말로 영구 삭제하시겠습니까? 복구할 수 없습니다.')) {
+        if (confirm('Are you sure you want to permanently delete this? This cannot be undone.')) {
             try {
                 remove(ref(db, `todos/${id}`));
             } catch (e) {
@@ -743,7 +763,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 div.innerHTML = `
                     <div class="trash-info">
                         <span class="trash-text">${escapeHtml(todo.text)}</span>
-                        <span style="font-size: 0.7rem; color: var(--text-muted);">삭제됨: ${new Date(todo.deletedAt).toLocaleString()}</span>
+                        <span style="font-size: 0.7rem; color: var(--text-muted);">Deleted: ${new Date(todo.deletedAt).toLocaleString()}</span>
                     </div>
                     <div class="trash-actions">
                         <button class="restore-btn" id="restore-${todo.id}"><i class="fas fa-undo"></i></button>
@@ -764,9 +784,9 @@ document.addEventListener('DOMContentLoaded', () => {
             li.dataset.id = todo.id;
 
             const priorityLabel = {
-                'low': '낮음',
-                'medium': '보통',
-                'high': '높음'
+                'low': 'Low',
+                'medium': 'Medium',
+                'high': 'High'
             }[priority];
 
             // Common Content
@@ -781,12 +801,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="dropdown-inputs">
                                 <div class="dropdown-row">
                                     <label><i class="far fa-clock"></i></label>
-                                    <input type="text" class="dropdown-deadline" id="deadline-${todo.id}" value="${todo.deadline || ''}" placeholder="마감 기한 설정">
+                                    <input type="text" class="dropdown-deadline" id="deadline-${todo.id}" value="${todo.deadline || ''}" placeholder="Set deadline">
                                 </div>
-                                <textarea class="feedback-input note-input" id="note-${todo.id}" placeholder="메모를 입력하세요...">${escapeHtml(todo.note || '')}</textarea>
+                                <textarea class="feedback-input note-input" id="note-${todo.id}" placeholder="Enter a note...">${escapeHtml(todo.note || '')}</textarea>
                             </div>
                             <div class="feedback-actions">
-                                <button class="fb-btn save" id="dropdown-save-${todo.id}">저장</button>
+                                <button class="fb-btn save" id="dropdown-save-${todo.id}">Save</button>
                             </div>
                         </div>
                     </div>
@@ -838,7 +858,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const newNote = noteInput.value.trim();
                     const newDeadline = deadlineInput.value;
 
-                    saveBtn.textContent = '저장 중...';
+                    saveBtn.textContent = 'Saving...';
                     saveBtn.disabled = true;
 
                     try {
@@ -846,15 +866,15 @@ document.addEventListener('DOMContentLoaded', () => {
                             note: newNote,
                             deadline: newDeadline
                         });
-                        saveBtn.textContent = '저장 완료';
+                        saveBtn.textContent = 'Saved';
                         setTimeout(() => {
-                            saveBtn.textContent = '저장';
+                            saveBtn.textContent = 'Save';
                             saveBtn.disabled = false;
                         }, 1000);
                     } catch (e) {
                         console.error("Error updating todo: ", e);
-                        alert("저장 중 오류가 발생했습니다.");
-                        saveBtn.textContent = '저장';
+                        alert("Error saving.");
+                        saveBtn.textContent = 'Save';
                         saveBtn.disabled = false;
                     }
                 });
@@ -885,8 +905,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const remainingMins = diffMins % 60;
 
                     let diffText = '';
-                    if (diffHrs > 0) diffText += `${diffHrs}시간 `;
-                    diffText += `${remainingMins}분`;
+                    if (diffHrs > 0) diffText += `${diffHrs}h `;
+                    diffText += `${remainingMins}m`;
 
                     let statusClass = '';
                     let statusIcon = '';
@@ -895,11 +915,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (diffMs > 0) {
                         statusClass = 'late';
                         statusIcon = '<i class="fas fa-exclamation-circle"></i>';
-                        statusLabel = '지각';
+                        statusLabel = 'Late';
                     } else {
                         statusClass = 'early';
                         statusIcon = '<i class="fas fa-check-circle"></i>';
-                        statusLabel = '세이프';
+                        statusLabel = 'On Time';
                     }
 
                     timeComparisonHtml = `
@@ -912,10 +932,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                             <div class="time-details" id="time-details-${todo.id}">
                                 <div class="time-detail-row">
-                                    <i class="far fa-clock"></i> <span>마감: ${formatDeadline(todo.deadline)}</span>
+                                    <i class="far fa-clock"></i> <span>Due: ${formatDeadline(todo.deadline)}</span>
                                 </div>
                                 <div class="time-detail-row">
-                                    <i class="fas fa-check"></i> <span>완료: ${formatDeadline(todo.completedAt)}</span>
+                                    <i class="fas fa-check"></i> <span>Done: ${formatDeadline(todo.completedAt)}</span>
                                 </div>
                             </div>
                         </div>
