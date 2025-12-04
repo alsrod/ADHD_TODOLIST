@@ -32,4 +32,6 @@ Thank you for being here. We look forward to defeating these daily obstacles wit
 
 ## License
 
-MIT
+MIT License
+
+Copyright (c) 2025 onspace collective. All Rights Reserved.
