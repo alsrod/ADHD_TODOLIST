@@ -133,8 +133,10 @@ body {
 /* Default Order (Mobile/Tablet: Stacked) */
 .tasks-widget {
     order: 1;
-    flex: 2 0 600px;
-    /* Prioritize width, don't shrink below 600px if possible */
+    flex: 1 1 auto;
+    /* Allow shrinking and growing, auto basis for mobile */
+    width: 100%;
+    /* Ensure full width on mobile */
 }
 
 .achieved-container {
@@ -151,6 +153,21 @@ body {
     /* Reset sticky on mobile */
     flex: 1 1 300px;
     /* Allow shrinking */
+}
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem 0.5rem;
+    }
+
+    .container {
+        padding: 1.5rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
 }
 
 /* Input Row Optimization */
