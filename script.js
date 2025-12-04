@@ -147,7 +147,17 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetTimer() {
         clearInterval(timerInterval);
         isRunning = false;
-        timeLeft = totalTime;
+
+        // Logic:
+        // If timer was running or paused (timeLeft < totalTime AND timeLeft > 0), reset to original duration.
+        // If timer was setting up (timeLeft == totalTime) or finished (timeLeft <= 0), reset to 00:00.
+        if (timeLeft < totalTime && timeLeft > 0) {
+            timeLeft = totalTime;
+        } else {
+            totalTime = 0;
+            timeLeft = 0;
+        }
+
         updateTimerDisplay();
         timerStartBtn.innerHTML = '<i class="fas fa-play"></i>';
         timerStartBtn.classList.remove('active');
