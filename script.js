@@ -289,6 +289,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Scroll to top on click
         scrollTopBtn.addEventListener('click', () => {
+            // Close all open dropdowns
+            const openDropdowns = document.querySelectorAll('.todo-notes');
+            openDropdowns.forEach(dropdown => {
+                dropdown.style.maxHeight = '';
+                dropdown.style.opacity = '';
+            });
+
+            // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
