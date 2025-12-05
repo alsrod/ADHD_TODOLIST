@@ -275,6 +275,24 @@ document.addEventListener('DOMContentLoaded', () => {
     stopwatchStartBtn.addEventListener('click', startStopwatch);
     stopwatchResetBtn.addEventListener('click', resetStopwatch);
 
+    // Scroll to top button
+    const scrollTopBtn = document.getElementById('scroll-top-btn');
+    if (scrollTopBtn) {
+        // Show/hide button based on scroll position
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        // Scroll to top on click
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
     function setTime(seconds) {
         resetTimer();
         totalTime = seconds;

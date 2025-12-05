@@ -22,7 +22,7 @@
                 h = d.documentElement, t = setTimeout(function () { h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive"; }, config.scriptTimeout), tk = d.createElement("script"), f = false, s = d.getElementsByTagName("script")[0], a; h.className += " wf-loading"; tk.src = 'https://use.typekit.net/' + config.kitId + '.js'; tk.async = true; tk.onload = tk.onreadystatechange = function () { a = this.readyState; if (f || a && a != "complete" && a != "loaded") return; f = true; clearTimeout(t); try { Typekit.load(config) } catch (e) { } }; s.parentNode.insertBefore(tk, s)
         })(document);
     </script>
-    <link rel="stylesheet" href="style.css?v=18">
+    <link rel="stylesheet" href="style.css?v=20">
 </head>
 
 <body>
@@ -166,6 +166,11 @@
             </button>
         </div>
 
+        <!-- Scroll to Top Button (Mobile Only) -->
+        <div id="scroll-top-btn" class="scroll-top-btn">
+            <i class="fas fa-chevron-up"></i>
+        </div>
+
         <!-- Trash Dock -->
         <div id="trash-dock" class="trash-dock">
             <div class="trash-header" id="trash-header">
@@ -198,7 +203,7 @@
         <p>&copy; 2025 onspace collective. All Rights Reserved.</p>
     </footer>
 
-    <script type="module" src="script.js?v=28"></script>
+    <script type="module" src="script.js?v=30"></script>
 </body>
 
 </html>

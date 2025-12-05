@@ -1405,6 +1405,7 @@ input[type="datetime-local"]:focus,
     justify-content: center;
     align-items: center;
     transition: all 0.3s ease;
+    opacity: 0.8;
 }
 
 .mode-switch-dock:hover {
@@ -1427,8 +1428,49 @@ input[type="datetime-local"]:focus,
     transition: color 0.3s ease;
 }
 
+
 .mode-switch-btn:hover {
     color: var(--secondary-color);
+}
+
+/* Scroll to Top Button */
+.scroll-top-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 45px;
+    height: 45px;
+    background: rgba(20, 20, 20, 0.9);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: 50%;
+    z-index: 1000;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    display: none;
+    /* Hidden by default, shown when scrolled */
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text-muted);
+    font-size: 1rem;
+    opacity: 0.5;
+}
+
+.scroll-top-btn.visible {
+    display: flex;
+}
+
+.scroll-top-btn:hover {
+    transform: translateX(-50%) translateY(-2px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+.scroll-top-btn:active {
+    transform: translateX(-50%) translateY(0);
 }
 
 /* Trash Dock Styles */
@@ -1450,6 +1492,7 @@ input[type="datetime-local"]:focus,
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
+    opacity: 0.8;
 }
 
 .trash-dock.expanded {
